@@ -140,77 +140,63 @@ for(int i = 0; i < width; ++i){
 }
 
 void WPPMAT001::FrameSequence:: write(){
-   std::cout<<"hi"<<" "<<imageSequence.size();
    for(int i = 0; i<imageSequence.size();i++){
      std::string filename1 = std::to_string(i)+"test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      
       for(int l = 0;l<640;l++){
        out.write((char *)imageSequence[i][l],480);
       }
-     //unsigned char ** printSequence = images.getFrame(i);
-      /*for (int k = 0; k < 480 ; k++){
-         for(int j = 0;j<640;j++){
-         unsigned char* ptr = &([k][j]) ;
-            //if (i<10){&
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
-           out.write((char*)frame[j], 480);
-            }
-       //}*/
-         
       out.close();
-   
-
-
-
-}
+   }
 }
 void WPPMAT001::FrameSequence:: reverse(){
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 =std::to_string(i)+ "test.pgm";
+     std::string filename1 = std::to_string(i)+"reverse_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      //unsigned char ** printSequence = images.getFrame(i);
-      for (int k = 480; k >0 ; k--)
       
-        {
-         for(int j = 640;j>0;j--){
-         unsigned char* ptr = &(imageSequence[i][k][j]);
-         //ptr = &two_pointer[i][j];
-            //if (i<10){
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
-            out.write((char*)ptr, 1);
-            }
-        }
+      for(int l = 640;l>0;l--){
+       out.write((char *)imageSequence[i][l],480);
+      }
          
       out.close();
-   }
+}
 
 
 }
 
 void WPPMAT001::FrameSequence:: invert(){
+   //for(int i = 0; i<imageSequence.size();i++){
+     //std::string filename1 = std::to_string(i)+"test.pgm";
+     /// std::ofstream out(filename1, std::ofstream::binary);
+      //out<<"P5\n";
+      //out<< 480<<" "<<640 <<"\n";
+      ///out<< 255 <<"\n";
+      //for(int l = 0;l<640;l++){
+       //out.write((char *)imageSequence[i][l],480);
+      //}
+      //out.close();
+   //}
+   
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 =std::to_string(i)+ "test.pgm";
+      std::string filename1 =std::to_string(i)+ "invert_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
       //unsigned char ** printSequence = images.getFrame(i);
-      for (int k = 0; k < 480 ; k++)
+      for (int k = 0; k <640 ; k++)
       
         {
-         for(int j = 0;j<640;j++){
+         for(int j = 0;j<480;j++){
          unsigned char  ptr = 255-imageSequence[i][k][j];
          unsigned char* ptr2 = &(ptr);
-         //ptr = &two_pointer[i]j];
+         //ptr = &two_pointer[i][j];
             //if (i<10){
               // std::cout<<two_pointer[i][i]<<std::endl;
             //}
@@ -220,7 +206,11 @@ void WPPMAT001::FrameSequence:: invert(){
          
       out.close();
    }
+   
+   
+   
 }
+
 
 void WPPMAT001::FrameSequence:: reverse_invert(){
    for(int i = 0; i<imageSequence.size();i++){
