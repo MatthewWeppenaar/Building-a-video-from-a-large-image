@@ -58,39 +58,13 @@ void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yori
       for(int j = 0;j<height;j++){
          two_pointer[j] = new unsigned  char[height];
          for(int k = 0;k<width;k++){
-           
             infile.read((char*)&two_pointer[j][k], 1);
          }
     }
     infile.close();
-     //std::string filename1 ="test_sloan.pgm";
-      //std::ofstream out(filename1, std::ofstream::binary);
-     // out<<"P5\n";
-      //out<< 480<<" "<<640 <<"\n";
-      //out<< 255 <<"\n";
-    //for (int j = 0; j < 640 ; j++)
-      
-        //{
-         //for(int k = 0;k<480;k++){
-         //out.write((char*)&two_pointer[j][k], 1);
-         //unsigned char* ptr = &(two_pointer[j][k]) ;
-            //if (i<10){&
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
-           //out.write((char*)ptr, 1);
-            //}
-       //}
-     //out.close();
-
-    
-    
-   //unsigned char **  frame = new unsigned char *[640];
-   
    for(int i = 0 ; i<coords.size(); i++){
-      //unsigned char ** frame = nullptr;
-      
       int y = coords[i].ycoord;
-       unsigned char **  frame = new unsigned char * [640];
+      unsigned char **  frame = new unsigned char * [640];
          //std::cout<<x<<' '<<y<<std::endl;        
          for(int j = 0; j<640;j++){
             int x = coords[i].xcoord;
@@ -106,32 +80,7 @@ void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yori
          }
          //std::cout<<imageSequence.size()<<std::endl;
          imageSequence.push_back(frame);
-      //std::string filename1 = std::to_string(i)+"test.pgm";
-      //std::ofstream out(filename1, std::ofstream::binary);
-      //out<<"P5\n";
-      //out<< 480<<" "<<640 <<"\n";
-      //out<< 255 <<"\n";
-      
-      //for(int l = 0;l<640;l++){
-       //out.write((char *)imageSequence[i][l],480);
-      //}
-     //unsigned char ** printSequence = images.getFrame(i);
-      /*for (int k = 0; k < 480 ; k++){
-         for(int j = 0;j<640;j++){
-         unsigned char* ptr = &([k][j]) ;
-            //if (i<10){&
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
-           out.write((char*)frame[j], 480);
-            }
-       //}*/
-         
-      //out.close();
-   
-   
-
-
-}
+      }
 for(int i = 0; i < width; ++i){
 		delete [] two_pointer[i];
 	   }
@@ -141,7 +90,7 @@ for(int i = 0; i < width; ++i){
 
 void WPPMAT001::FrameSequence:: write(){
    for(int i = 0; i<imageSequence.size();i++){
-     std::string filename1 = std::to_string(i)+"test.pgm";
+      std::string filename1 = std::to_string(i)+"test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
@@ -159,15 +108,11 @@ void WPPMAT001::FrameSequence:: reverse(){
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      
       for(int l = 640;l>0;l--){
        out.write((char *)imageSequence[i][l],480);
-      }
-         
+      }  
       out.close();
-}
-
-
+   }
 }
 
 void WPPMAT001::FrameSequence:: invert(){
@@ -184,7 +129,7 @@ void WPPMAT001::FrameSequence:: invert(){
    //}
    
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 =std::to_string(i)+ "invert_test.pgm";
+      std::string filename1 = std::to_string(i)+ "invert_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
