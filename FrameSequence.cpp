@@ -17,12 +17,15 @@ void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yori
    float g = float(yend-ystart)/float(xend-xstart);
    WPPMAT001::origion_coords coord;
    if (std::fabs(g)  < 1.0){ 
+   
+   
+   
    if(xend>xstart){
    float y = ystart;
    coord.xcoord = xstart;
    coord.ycoord = y;
-   coords.push_back(coord);
-   for (int x=xstart+1; x <= xend; ++x){
+   //coords.push_back(coord);
+   for (int x=xstart; x <= xend; ++x){
       y = y + g; 
       coord.xcoord = x;
       coord.ycoord = std::round(y);
@@ -33,7 +36,7 @@ void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yori
       float y = ystart;
       coord.xcoord = xstart;
       coord.ycoord = y;
-      coords.push_back(coord);
+      //coords.push_back(coord);
       for (int x=xstart-1; x >= xend; --x){
          y = y + g;
          coord.xcoord = x;
@@ -103,48 +106,39 @@ void WPPMAT001::FrameSequence:: write(){
 }
 void WPPMAT001::FrameSequence:: reverse(){
    for(int i = 0; i<imageSequence.size();i++){
-     std::string filename1 = std::to_string(i)+"reverse_test.pgm";
+      std::string filename1 = std::to_string(i)+ "reverse_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      for(int l = 640;l>0;l--){
-       out.write((char *)imageSequence[i][l],480);
-      }  
+      for (int k = 640-1; k>=0 ; k--)
+      
+        {
+         for(int j = 480-1;j>=0;j--){
+            unsigned char  ptr = getFrame(i)[k][j];
+            unsigned char* ptr2 = &(ptr);
+            out.write((char*)ptr2, 1);
+            }
+        }
+         
       out.close();
    }
+
 }
 
 void WPPMAT001::FrameSequence:: invert(){
-   //for(int i = 0; i<imageSequence.size();i++){
-     //std::string filename1 = std::to_string(i)+"test.pgm";
-     /// std::ofstream out(filename1, std::ofstream::binary);
-      //out<<"P5\n";
-      //out<< 480<<" "<<640 <<"\n";
-      ///out<< 255 <<"\n";
-      //for(int l = 0;l<640;l++){
-       //out.write((char *)imageSequence[i][l],480);
-      //}
-      //out.close();
-   //}
-   
    for(int i = 0; i<imageSequence.size();i++){
       std::string filename1 = std::to_string(i)+ "invert_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      //unsigned char ** printSequence = images.getFrame(i);
       for (int k = 0; k <640 ; k++)
       
         {
          for(int j = 0;j<480;j++){
-         unsigned char  ptr = 255-imageSequence[i][k][j];
-         unsigned char* ptr2 = &(ptr);
-         //ptr = &two_pointer[i][j];
-            //if (i<10){
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
+            unsigned char  ptr = 255-imageSequence[i][k][j];
+            unsigned char* ptr2 = &(ptr);
             out.write((char*)ptr2, 1);
             }
         }
@@ -158,23 +152,18 @@ void WPPMAT001::FrameSequence:: invert(){
 
 
 void WPPMAT001::FrameSequence:: reverse_invert(){
-   for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 =std::to_string(i)+ "test.pgm";
+  for(int i = 0; i<imageSequence.size();i++){
+      std::string filename1 = std::to_string(i)+ "reverse_invert_test.pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< 480<<" "<<640 <<"\n";
       out<< 255 <<"\n";
-      //unsigned char ** printSequence = images.getFrame(i);
-      for (int k = 480; k >0 ; k--)
+      for (int k = 640-1; k>=0 ; k--)
       
         {
-         for(int j = 640;j>0;j--){
-         unsigned char  ptr = 255-imageSequence[i][k][j];
-         unsigned char* ptr2 = &(ptr);
-         //ptr = &two_pointer[i][j];
-            //if (i<10){
-              // std::cout<<two_pointer[i][i]<<std::endl;
-            //}
+         for(int j = 480-1;j>=0;j--){
+            unsigned char  ptr = 255-getFrame(i)[k][j];
+            unsigned char* ptr2 = &(ptr);
             out.write((char*)ptr2, 1);
             }
         }
