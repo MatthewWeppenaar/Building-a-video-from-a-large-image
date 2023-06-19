@@ -92,10 +92,7 @@ for (int i = 0; i < coords.size(); i++) {
     imageSequence.push_back(frame);
 }
 
-std::cout << "pushed frames" << std::endl;
-//write(fheight,fwidth);
-//reverse_invert(fheight,fwidth);
-//write(fheight,fwidth);
+
 
 //deallocating memory from big image
 for (int i = 0; i < height; ++i) { 
