@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <sstream>
 
 void WPPMAT001::FrameSequence::add(unsigned char ** test){imageSequence.push_back(test);}
 int WPPMAT001::FrameSequence:: size(){return imageSequence.size();}
@@ -92,9 +93,9 @@ for (int i = 0; i < coords.size(); i++) {
 }
 
 std::cout << "pushed frames" << std::endl;
-write(fheight,fwidth);
-reverse_invert(fheight,fwidth);
-write(fheight,fwidth);
+//write(fheight,fwidth);
+//reverse_invert(fheight,fwidth);
+//write(fheight,fwidth);
 
 //deallocating memory from big image
 for (int i = 0; i < height; ++i) { 
@@ -103,11 +104,16 @@ for (int i = 0; i < height; ++i) {
 delete[] two_pointer;
 }
 
-void WPPMAT001::FrameSequence:: write(int height, int width){
+void WPPMAT001::FrameSequence:: write(int height, int width, std::string fileName){
    std::cout<<"none"<<std::endl;
    //writing frames unchanged 
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 = "out/"+std::to_string(i)+"test.pgm";
+      std::string str = std::to_string(i);
+      size_t n = 4;
+      std::ostringstream ss;
+      ss << std::setw(n) << std::setfill('0') << str;
+      std::string s = ss.str();
+      std::string filename1 = "out/"+fileName+"-"+s+".pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
@@ -118,10 +124,15 @@ void WPPMAT001::FrameSequence:: write(int height, int width){
       out.close();
    }
 }
-void WPPMAT001::FrameSequence:: reverse(int height, int width){
+void WPPMAT001::FrameSequence:: reverse(int height, int width,std::string fileName){
    std::cout<<"reverse"<<std::endl;
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 = "out/"+std::to_string(i)+ "reverse_test.pgm";
+      std::string str = std::to_string(i);
+      size_t n = 4;
+      std::ostringstream ss;
+      ss << std::setw(n) << std::setfill('0') << str;
+      std::string s = ss.str();
+      std::string filename1 = "out/"+fileName+"-"+s+".pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
@@ -141,10 +152,15 @@ void WPPMAT001::FrameSequence:: reverse(int height, int width){
 
 }
 
-void WPPMAT001::FrameSequence:: invert(int height, int width){
+void WPPMAT001::FrameSequence:: invert(int height, int width,std::string fileName){
    std::cout<<"invert"<<std::endl;
    for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 = "out/"+std::to_string(i)+ "invert_test.pgm";
+      std::string str = std::to_string(i);
+      size_t n = 4;
+      std::ostringstream ss;
+      ss << std::setw(n) << std::setfill('0') << str;
+      std::string s = ss.str();
+      std::string filename1 = "out/"+fileName+"-"+s+".pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
@@ -164,10 +180,15 @@ void WPPMAT001::FrameSequence:: invert(int height, int width){
 }
 
 
-void WPPMAT001::FrameSequence:: reverse_invert(int height, int width){
+void WPPMAT001::FrameSequence:: reverse_invert(int height, int width,std::string fileName){
   std::cout<<"reverse_invert"<<std::endl;
   for(int i = 0; i<imageSequence.size();i++){
-      std::string filename1 = "out/"+std::to_string(i)+ "reverse_invert_test.pgm";
+      std::string str = std::to_string(i);
+      size_t n = 4;
+      std::ostringstream ss;
+      ss << std::setw(n) << std::setfill('0') << str;
+      std::string s = ss.str();
+      std::string filename1 = "out/"+fileName+"-"+s+".pgm";
       std::ofstream out(filename1, std::ofstream::binary);
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
@@ -192,9 +213,9 @@ void WPPMAT001::FrameSequence:: reverse_invert(int height, int width){
 WPPMAT001::FrameSequence::FrameSequence(){};
 
 WPPMAT001::FrameSequence::~FrameSequence() {
-   int fheight = sizeof(imageSequence[0])/sizeof(imageSequence[0][0]); //getting height image
+   int fheight = sizeof(imageSequence[0])/sizeof(imageSequence[0][0]); //getting height of image
     for (int i = 0; i < imageSequence.size(); i++) {
-        if (imageSequence[i] != nullptr) {
+        if (imageSequence[i] != nullptr) {//checking if array of image is not null
             for (int j = 0; j < fheight; j++) { 
                 delete[] imageSequence[i][j];
             }
