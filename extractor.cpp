@@ -5,36 +5,21 @@
 
 int main(int argc, char *argv[]){
   WPPMAT001::FrameSequence image;
-  int xs;
-  int ys;
-  int xe;
-  int ye;
-  int frameheight;
-  int framewidth;
-  int arg = 0;
+  int xs = std::stoi(argv[3]);//reading start and end points
+  int ys = std::stoi(argv[4]);
+  int xe = std::stoi(argv[5]);
+  int ye = std::stoi(argv[6]);
+  int frameheight = std::stoi(argv[8]);//frame dimensions
+  int framewidth  = std::stoi(argv[9]);
+  
+
   std::string imagefilename;
-  if(argc>1){
-   imagefilename = argv[++arg];
-   std:: string t = argv[++arg];
- 
-   if(t == "-t"){
-      xs = std::stoi(argv[++arg]);
-      ys = std::stoi(argv[++arg]);
-      
-      xe = std::stoi(argv[++arg]);
-      ye = std::stoi(argv[++arg]);
-   
-   }
-   
-   std::string s = argv[++arg];
-   if(s == "-s"){
-      frameheight = std::stoi(argv[++arg]);
-      framewidth = std::stoi(argv[++arg]);
-      
-   }
-   std::cout<<imagefilename<<std::endl<<xs<<std::endl<<ys<<std::endl<<xe<<std::endl<<ye<<std::endl;
-   image.read(imagefilename,xs,ys,xe,ye,frameheight,framewidth);
-   
+  imagefilename = argv[1];
+  image.read(imagefilename,xs,ys,xe,ye,frameheight,framewidth);
+
+    
+   int arg = 10;
+   /*
    std::string w = argv[++arg];
       while(w == "-w"){
          std::string option = argv[++arg];
@@ -65,7 +50,7 @@ int main(int argc, char *argv[]){
          w =  w = argv[++arg];
           
       }
-  }
+      */
   
    return 0;
 
