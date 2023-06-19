@@ -123,8 +123,8 @@ void WPPMAT001::FrameSequence:: write(int height, int width, std::string fileNam
 }
 void WPPMAT001::FrameSequence:: reverse(int height, int width,std::string fileName){
    std::cout<<"reverse"<<std::endl;
-   for(int i = 0; i<imageSequence.size();i++){
-      std::string str = std::to_string(i);
+   for(int i = imageSequence.size()-1; i>=0;i--){
+      std::string str = std::to_string(imageSequence.size()-i);
       size_t n = 4;
       std::ostringstream ss;
       ss << std::setw(n) << std::setfill('0') << str;
@@ -134,10 +134,10 @@ void WPPMAT001::FrameSequence:: reverse(int height, int width,std::string fileNa
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
       out<< 255 <<"\n";
-      for (int k = height-1; k>=0 ; k--)
+      for (int k = 0; k<height ; k++)
       
         {
-         for(int j = width-1;j>=0;j--){
+         for(int j = 0;j<width;j++){
             unsigned char  ptr = getFrame(i)[k][j];
             unsigned char* ptr2 = &(ptr);
             out.write((char*)ptr2, 1);
@@ -179,8 +179,8 @@ void WPPMAT001::FrameSequence:: invert(int height, int width,std::string fileNam
 
 void WPPMAT001::FrameSequence:: reverse_invert(int height, int width,std::string fileName){
   std::cout<<"reverse_invert"<<std::endl;
-  for(int i = 0; i<imageSequence.size();i++){
-      std::string str = std::to_string(i);
+  for(int i = imageSequence.size()-1; i>=0;i--){
+      std::string str = std::to_string(imageSequence.size()-i);
       size_t n = 4;
       std::ostringstream ss;
       ss << std::setw(n) << std::setfill('0') << str;
@@ -190,10 +190,10 @@ void WPPMAT001::FrameSequence:: reverse_invert(int height, int width,std::string
       out<<"P5\n";
       out<< width<<" "<<height <<"\n";
       out<< 255 <<"\n";
-      for (int k = height-1; k>=0 ; k--)
+      for (int k = 0; k<height ; k++)
       
         {
-         for(int j = width-1;j>=0;j--){
+         for(int j = 0;j<width;j++){
             unsigned char  ptr = 255-getFrame(i)[k][j];
             unsigned char* ptr2 = &(ptr);
             out.write((char*)ptr2, 1);
