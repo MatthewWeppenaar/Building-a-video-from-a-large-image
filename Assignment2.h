@@ -15,10 +15,10 @@ namespace WPPMAT001{
          unsigned char ** getFrame(int frame);
          std::vector<unsigned char **> getSequence();
          void read(std::string filename, int xorigion, int yorigion, int xend, int yend, int height, int width);
-         void write(int height, int width);
-         void reverse(int height, int width);
-         void invert(int height, int width);
-         void reverse_invert(int height, int width);
+         void write(int height, int width,std::string fileName);
+         void reverse(int height, int width,std::string fileName);
+         void invert(int height, int width,std::string fileName);
+         void reverse_invert(int height, int width,std::string fileName);
          
    
    };
