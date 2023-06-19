@@ -8,93 +8,99 @@ int WPPMAT001::FrameSequence:: size(){return imageSequence.size();}
 unsigned char** WPPMAT001::FrameSequence::getFrame(int frame){return imageSequence[frame];}
 std::vector<unsigned char **> WPPMAT001::FrameSequence::getSequence(){return imageSequence;}
 void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yorigion, int xfinal, int yfinal, int fheight, int fwidth){
-   std::cout<<"read"<<std::endl;
-   int xstart = xorigion;
-   int xend = xfinal;
-   int ystart = yorigion;
-   int yend = yfinal;
-   std::vector<WPPMAT001::origion_coords> coords;
-   //trajectory calculation
-   float g = float(yend-ystart)/float(xend-xstart);
-   WPPMAT001::origion_coords coord;
-   if (std::fabs(g)  < 1.0){ 
-   
-   
-   
-   if(xend>xstart){
-   float y = ystart;
-   coord.xcoord = xstart;
-   coord.ycoord = y;
-   //coords.push_back(coord);
-   for (int x=xstart; x <= xend; ++x){
-      y = y + g; 
-      coord.xcoord = x;
-      coord.ycoord = std::round(y);
-      coords.push_back(coord);
-      }   
-   }
-   else{ 
-      float y = ystart;
-      coord.xcoord = xstart;
-      coord.ycoord = y;
-      //coords.push_back(coord);
-      for (int x=xstart-1; x >= xend; --x){
-         y = y + g;
-         coord.xcoord = x;
-         coord.ycoord = std::round(y);
-         coords.push_back(coord);
-      } 
-      }
-   }
-   
-   //opening file
-   std::ifstream infile(filename, std::ios::binary);
-   if (!infile) {
-        std::cerr << "Error opening file" << std::endl;
+  std::cout << "read" << std::endl;
+int xstart = xorigion;
+int xend = xfinal;
+int ystart = yorigion;
+int yend = yfinal;
+std::vector<WPPMAT001::origion_coords> coords;
+
+//trajectory calculation
+float g = float(yend - ystart) / float(xend - xstart);
+WPPMAT001::origion_coords coord;
+
+if (std::fabs(g) < 1.0) {
+    if (xend > xstart) {
+        float y = ystart;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart; x <= xend; ++x) {
+            y = y + g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+            coords.push_back(coord);
+        }
     }
-    std::string magic;
-    int width, height, maxval;
-    infile >> magic >> width >> height >> maxval;
-    if (magic != "P5" || maxval > 255) {
-        std::cerr << "Invalid pgm format" << std::endl;
+    else {
+        float y = ystart;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart - 1; x >= xend; --x) {
+            y = y + g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+            coords.push_back(coord);
+        }
     }
-    //reading file into 2d unsigned array
-   infile.ignore(1, '\n'); 
-   unsigned char ** two_pointer;
-   two_pointer = new unsigned char * [width];
-      for(int j = 0;j<height;j++){
-         two_pointer[j] = new unsigned  char[height];
-         for(int k = 0;k<width;k++){
-            infile.read((char*)&two_pointer[j][k], 1);
-         }
+}
+
+//opening file
+std::ifstream infile(filename, std::ios::binary);
+if (!infile) {
+    std::cerr << "Error opening file" << std::endl;
+}
+
+std::string magic;
+int width, height, maxval;
+infile >> magic >> width >> height >> maxval;
+
+if (magic != "P5" || maxval > 255) {
+    std::cerr << "Invalid pgm format" << std::endl;
+}
+
+infile.ignore(1, '\n');
+unsigned char** two_pointer;
+//Allocating space for input image- height, then width
+two_pointer = new unsigned char* [height]; 
+
+for (int j = 0; j < height; j++) { 
+    two_pointer[j] = new unsigned char[width];
+    for (int k = 0; k < width; k++) { 
+        infile.read((char*)&two_pointer[j][k], 1);//assigning pixel value to pointer address
     }
-    infile.close();
-   //creating frames using coordinates and adding to image sequence
-   std::cout<<coords.size()<<std::endl;
-   for(int i = 0 ; i<coords.size(); i++){
-      int y = coords[i].ycoord;
-      unsigned char **  frame = new unsigned char * [fheight];
-         //std::cout<<x<<' '<<y<<std::endl;        
-         for(int j = 0; j<fheight;j++){
-            int x = coords[i].xcoord;
-            frame[j] = new unsigned char [fwidth];
-            for(int k = 0;k<fwidth;k++){
-               
-               frame[j][k] = two_pointer[y][x];
-               x++;
-            }
-            y++; 
-            
-         
-         }
-         imageSequence.push_back(frame);         
-      }
-//dealocating memoory from big image    
-for(int i = 0; i < width; ++i){
-		delete [] two_pointer[i];
-	   }
-      delete [] two_pointer;
-          
+}
+
+infile.close();
+
+std::cout << coords.size() << std::endl;
+
+for (int i = 0; i < coords.size(); i++) {
+    int y = coords[i].ycoord;
+    unsigned char** frame = new unsigned char* [fheight]; 
+
+    for (int j = 0; j < fheight; j++) {
+        int x = coords[i].xcoord;
+        frame[j] = new unsigned char[fwidth];
+        for (int k = 0; k < fwidth; k++) {
+            frame[j][k] = two_pointer[y][x];
+            x++;
+        }
+        y++;
+    }
+
+    imageSequence.push_back(frame);
+}
+
+std::cout << "pushed frames" << std::endl;
+write(fheight,fwidth);
+reverse_invert(fheight,fwidth);
+write(fheight,fwidth);
+
+//deallocating memory from big image
+for (int i = 0; i < height; ++i) { 
+    delete[] two_pointer[i];
+}
+delete[] two_pointer;
 }
 
 void WPPMAT001::FrameSequence:: write(int height, int width){
@@ -185,14 +191,15 @@ void WPPMAT001::FrameSequence:: reverse_invert(int height, int width){
 
 WPPMAT001::FrameSequence::FrameSequence(){};
 
-WPPMAT001::FrameSequence::~FrameSequence(){
-   for(int i = 0;i <imageSequence.size()-1;i++){
-      if(imageSequence[i] != nullptr){
-       for(int j = 0 ;j<640;j++){
-          delete [] imageSequence[j];
-      }
-      delete[] imageSequence[i];
-   }
-  }
-};    
+WPPMAT001::FrameSequence::~FrameSequence() {
+   int fheight = sizeof(imageSequence[0])/sizeof(imageSequence[0][0]); //getting height image
+    for (int i = 0; i < imageSequence.size(); i++) {
+        if (imageSequence[i] != nullptr) {
+            for (int j = 0; j < fheight; j++) { 
+                delete[] imageSequence[i][j];
+            }
+            delete[] imageSequence[i];
+        }
+    }
+};  
    
