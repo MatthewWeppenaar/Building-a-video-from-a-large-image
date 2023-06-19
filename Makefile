@@ -11,10 +11,19 @@ clean:
 	rm *.o extractor.exe out/*.pgm *.mp4
 
 run:
-	./extractor.exe examples/sloan_image.pgm  -t 0 1 200 200 -s 640 480 -w none sequence2 -w reverse sequence_rev 
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 200 200 -s 640 480 -w none sequence2 -w reverse sequence_rev 
 
 run1:
 	./extractor.exe examples/larger_image.pgm  -t 0 1 500 500 -s 640 480 -w invert invseq -w none sequence2 -w reverse sequence3 
 
 run2:
 	./extractor.exe examples/sloan_image.pgm  -t 0 1 200 200 -s 640 480 -w invert sequence_invert -w reverse_invert sequence_rev_invert 
+
+run3:
+	./extractor.exe examples/sloan_image.pgm  -t 200 200 0 0 -s 640 480 -w none sequence2
+
+run4:
+	./extractor.exe examples/sloan_image.pgm  -t 100 0 0 100 -s 640 480 -w none sequence2
+
+run5:
+	./extractor.exe examples/sloan_image.pgm  -t 0 100 100 0 -s 640 480 -w none sequence2
