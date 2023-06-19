@@ -19,9 +19,10 @@ std::vector<WPPMAT001::origion_coords> coords;
 //trajectory calculation
 float g = float(yend - ystart) / float(xend - xstart);
 WPPMAT001::origion_coords coord;
-
-if (std::fabs(g) < 1.0) {
+std::cout << g << std::endl;
+if (std::fabs(g) <= 1.0) {
     if (xend > xstart) {
+      std::cout << "hi3" << std::endl;
         float y = ystart;
         coord.xcoord = xstart;
         coord.ycoord = y;
@@ -33,18 +34,89 @@ if (std::fabs(g) < 1.0) {
         }
     }
     else {
+        
+         std::cout << xstart << std::endl;
+         std::cout << ystart << std::endl;
         float y = ystart;
         coord.xcoord = xstart;
         coord.ycoord = y;
-        for (int x = xstart - 1; x >= xend; --x) {
+        for (int x = xstart-1; x >= xend; --x) {
+            y = y - g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+            coords.push_back(coord);
+           
+        
+    }
+    }
+}
+   /* else{
+        float y = ystart;
+        std::cout << "hi2" << std::endl;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart; x >= xend; --x) {
             y = y + g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+    }
+    }
+}
+/*else{
+   std::cout << "hi" << std::endl;
+   if (xend < xstart) {
+      std::cout << "xe<xs" << std::endl;
+      float y = ystart;
+      coord.xcoord = xstart;
+      coord.ycoord = y;
+      for (int x = xstart; x <= xend; --x) {
+            y = y - g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+            coords.push_back(coord);
+        }
+   }
+   else{
+         std::cout << "xe>xs" << std::endl;
+        float y = ystart;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart; x >= xend; --x) {
+         y = y - g;
+         coord.xcoord = x;
+         coord.ycoord = std::round(y);
+         coords.push_back(coord);
+        }
+   }
+}
+else{
+   if (xend < xstart) {
+      std::cout << "xe<xs" << std::endl;
+        float y = ystart;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart; x <= xend; --x) {
+            y = y - g;
             coord.xcoord = x;
             coord.ycoord = std::round(y);
             coords.push_back(coord);
         }
     }
-}
 
+    else{
+         float y = ystart;
+        coord.xcoord = xstart;
+        coord.ycoord = y;
+        for (int x = xstart; x >= xend; --x) {
+            y = y + g;
+            coord.xcoord = x;
+            coord.ycoord = std::round(y);
+            coords.push_back(coord);
+    }
+
+}
+}
+}*/
 //opening file
 std::ifstream infile(filename, std::ios::binary);
 if (!infile) {
@@ -100,6 +172,7 @@ for (int i = 0; i < height; ++i) {
 }
 delete[] two_pointer;
 }
+
 
 void WPPMAT001::FrameSequence:: write(int height, int width, std::string fileName){
    std::cout<<"none"<<std::endl;
@@ -203,9 +276,7 @@ void WPPMAT001::FrameSequence:: reverse_invert(int height, int width,std::string
       out.close();
    }
 
-
 }
-
 
 WPPMAT001::FrameSequence::FrameSequence(){};
 
