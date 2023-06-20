@@ -10,20 +10,32 @@ extractor.o: extractor.cpp
 clean:
 	rm *.o extractor.exe out/*.pgm *.mp4
 
-run:
-	./extractor.exe examples/sloan_image.pgm  -t 0 0 200 200 -s 640 480 -w none sequence2 -w reverse sequence_rev 
+run: #positive trajectory
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 500 500 -s 640 480 -w none sequence2 -w reverse sequence_rev 
 
-run1:
+run1: #positive trajectory with a few operations
 	./extractor.exe examples/larger_image.pgm  -t 0 1 500 500 -s 640 480 -w invert invseq -w none sequence2 -w reverse sequence3 
 
-run2:
+run2: #positive trajectory with a few operations
 	./extractor.exe examples/sloan_image.pgm  -t 0 1 200 200 -s 640 480 -w invert sequence_invert -w reverse_invert sequence_rev_invert 
 
-run3:
+run3: #positive trajectoty in reverse direction
 	./extractor.exe examples/sloan_image.pgm  -t 200 200 0 0 -s 640 480 -w none sequence2
 
-run4:
+run4: #negative trajectory
 	./extractor.exe examples/sloan_image.pgm  -t 100 0 0 100 -s 640 480 -w none sequence2
 
-run5:
+run5: #negative trajectory in reverse direction
 	./extractor.exe examples/sloan_image.pgm  -t 0 100 100 0 -s 640 480 -w none sequence2
+
+run6: #vertical trajectory
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 0 100 -s 640 480 -w none sequence3
+
+run7: #horizontal trajectory
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 100 0 -s 640 480 -w none sequence4
+
+run8: #horizontal trajectory in revese direction
+	./extractor.exe examples/sloan_image.pgm  -t 100 0 0 0 -s 640 480 -w none sequence4
+
+run9: #horizontal trajectory reverse direction
+	./extractor.exe examples/sloan_image.pgm  -t 0 100 0 0 -s 640 480 -w none sequence5
