@@ -39,3 +39,6 @@ run8: #horizontal trajectory in revese direction
 
 run9: #horizontal trajectory reverse direction
 	./extractor.exe examples/sloan_image.pgm  -t 0 100 0 0 -s 640 480 -w none sequence5
+
+run10: #positive trajectory
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 10000 10000 -s 640 480 -w none sequence2 -w reverse sequence_rev 
