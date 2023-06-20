@@ -8,16 +8,60 @@ void WPPMAT001::FrameSequence::add(unsigned char ** test){imageSequence.push_bac
 int WPPMAT001::FrameSequence:: size(){return imageSequence.size();}
 unsigned char** WPPMAT001::FrameSequence::getFrame(int frame){return imageSequence[frame];}
 std::vector<unsigned char **> WPPMAT001::FrameSequence::getSequence(){return imageSequence;}
-void WPPMAT001::FrameSequence::read(std::string filename, int xorigion, int yorigion, int xfinal, int yfinal, int fheight, int fwidth){
+void WPPMAT001::FrameSequence::read(std::string filename){
   std::cout << "read" << std::endl;
-int xstart = xorigion;
-int xend = xfinal;
-int ystart = yorigion;
-int yend = yfinal;
-std::vector<WPPMAT001::origion_coords> coords;
+
+
 
 //trajectory calculation
+
+//opening file
+std::ifstream infile(filename, std::ios::binary);
+if (!infile) {
+    std::cerr << "Error opening file" << std::endl;
+}
+
+std::string magic;
+int width, height, maxval;
+infile >> magic >> width >> height >> maxval;
+
+if (magic != "P5" || maxval > 255) {
+    std::cerr << "Invalid pgm format" << std::endl;
+}
+
+infile.ignore(1, '\n');
+//unsigned char** two_pointer;
+//Allocating space for input image- height, then width
+image = new unsigned char* [height]; 
+
+for (int j = 0; j < height; j++) { 
+    image[j] = new unsigned char[width];
+    for (int k = 0; k < width; k++) { 
+        infile.read((char*)&image[j][k], 1);//assigning pixel value to pointer address
+    }
+}
+infile.close();
+}
+
+void WPPMAT001::FrameSequence::deleteImage(){
+   //deleating space allocated for large image
+   int image_height = 0;
+   while (image[image_height] != nullptr) {
+      image_height++;
+   }
+   for (int i = 0; i < image_height; ++i) { 
+      delete[] image[i];
+   }
+   delete[] image;
+}
+
+std::vector<WPPMAT001::origion_coords> WPPMAT001::FrameSequence::generate_trajectory(int xorigion, int yorigion, int xend, int yend){
+int xstart = xorigion;
+//int xend = xend;
+int ystart = yorigion;
+//int yend = yend;
 float g = float(yend - ystart) / float(xend - xstart);
+std::vector<WPPMAT001::origion_coords> coords;
 WPPMAT001::origion_coords coord;
 //Vertical trajectory
 if(xend == xstart){
@@ -108,47 +152,20 @@ else{
          } 
       }
 }
-//opening file
-std::ifstream infile(filename, std::ios::binary);
-if (!infile) {
-    std::cerr << "Error opening file" << std::endl;
+
+return coords;
 }
 
-std::string magic;
-int width, height, maxval;
-infile >> magic >> width >> height >> maxval;
-
-if (magic != "P5" || maxval > 255) {
-    std::cerr << "Invalid pgm format" << std::endl;
-}
-
-infile.ignore(1, '\n');
-unsigned char** two_pointer;
-//Allocating space for input image- height, then width
-two_pointer = new unsigned char* [height]; 
-
-for (int j = 0; j < height; j++) { 
-    two_pointer[j] = new unsigned char[width];
-    for (int k = 0; k < width; k++) { 
-        infile.read((char*)&two_pointer[j][k], 1);//assigning pixel value to pointer address
-    }
-}
-
-infile.close();
-
-std::cout << coords.size() << std::endl;
-
-//creating frames using co-ordinates
-
-for (int i = 0; i < coords.size(); i++) {
+void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, std::vector<origion_coords> coords){
+   for (int i = 0; i < coords.size(); i++) {
     int y = coords[i].ycoord;
-    unsigned char** frame = new unsigned char* [fheight]; 
+    unsigned char** frame = new unsigned char* [height]; 
 
-    for (int j = 0; j < fheight; j++) {
+    for (int j = 0; j < height; j++) {
         int x = coords[i].xcoord;
-        frame[j] = new unsigned char[fwidth];
-        for (int k = 0; k < fwidth; k++) {
-            frame[j][k] = two_pointer[y][x];
+        frame[j] = new unsigned char[width];
+        for (int k = 0; k < width; k++) {
+            frame[j][k] = image[y][x];
             x++;
         }
         y++;
@@ -156,36 +173,32 @@ for (int i = 0; i < coords.size(); i++) {
 
     imageSequence.push_back(frame);
 }
-
-
-
 //deallocating memory from big image
-for (int i = 0; i < height; ++i) { 
-    delete[] two_pointer[i];
-}
-delete[] two_pointer;
+ deleteImage();
 }
 
-
-void WPPMAT001::FrameSequence:: write(int height, int width, std::string fileName){
-   std::cout<<"none"<<std::endl;
-   //writing frames unchanged 
-   for(int i = 0; i<imageSequence.size();i++){
-      std::string str = std::to_string(i);
-      size_t n = 4;
-      std::ostringstream ss;
-      ss << std::setw(n) << std::setfill('0') << str;
-      std::string s = ss.str();
-      std::string filename1 = "out/"+fileName+"-"+s+".pgm";
-      std::ofstream out(filename1, std::ofstream::binary);
-      out<<"P5\n";
-      out<< width<<" "<<height <<"\n";
-      out<< 255 <<"\n";
-      for(int l = 0;l<height;l++){
-       out.write((char *)imageSequence[i][l],width);
-      }
-      out.close();
-   }
+void WPPMAT001::FrameSequence::write(int height, int width, std::string fileName)
+{
+std::cout << "none" << std::endl;
+// writing frames unchanged
+for (int i = 0; i < imageSequence.size(); i++)
+{
+    std::string str = std::to_string(i);
+    size_t n = 4;
+    std::ostringstream ss;
+    ss << std::setw(n) << std::setfill('0') << str;
+    std::string s = ss.str();
+    std::string filename1 = "out/" + fileName + "-" + s + ".pgm";
+    std::ofstream out(filename1, std::ofstream::binary);
+    out << "P5\n";
+    out << width << " " << height << "\n";
+    out << 255 << "\n";
+    for (int l = 0; l < height; l++)
+    {
+        out.write((char *)imageSequence[i][l], width);
+    }
+    out.close();
+}
 }
 void WPPMAT001::FrameSequence:: reverse(int height, int width,std::string fileName){
    std::cout<<"reverse"<<std::endl;
