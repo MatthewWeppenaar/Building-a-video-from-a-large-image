@@ -21,7 +21,10 @@ int main(int argc, char *argv[]){
 
   std::string imagefilename;
   imagefilename = argv[1];
-  image.read(imagefilename,xs,ys,xe,ye,frameheight,framewidth);//creating frames along trajectory
+  std::vector<WPPMAT001::origion_coords> coords= image.generate_trajectory(xs,ys,xe,ye);
+  image.read(imagefilename);//creating frames along trajectory
+  image.generate_frame_sequence(frameheight,framewidth,coords);
+  
   
   //collecting all the frame operations into a vector
   for(int i=10;i<argc; i++){
