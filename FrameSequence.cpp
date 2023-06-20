@@ -19,10 +19,26 @@ std::vector<WPPMAT001::origion_coords> coords;
 //trajectory calculation
 float g = float(yend - ystart) / float(xend - xstart);
 WPPMAT001::origion_coords coord;
-std::cout << g << std::endl;
-if (std::fabs(g) <= 1.0) {
+//Vertical trajectory
+if(xend == xstart){
+   if(yend>ystart){
+   for (int i = ystart;i<yend;i++){
+         coord.xcoord = 0;
+         coord.ycoord = std::round(i);
+         coords.push_back(coord);
+      }
+   }
+   else{
+      for (int i = ystart;i>yend;i--){
+         coord.xcoord = 0;
+         coord.ycoord = std::round(i);
+         coords.push_back(coord);
+      }
+   }
+}
+//positive diagonal trajectory
+if (g > 0) {
     if (xend > xstart) {
-      std::cout << "hi3" << std::endl;
         float y = ystart;
         coord.xcoord = xstart;
         coord.ycoord = y;
@@ -34,9 +50,7 @@ if (std::fabs(g) <= 1.0) {
         }
     }
     else {
-        
-         std::cout << xstart << std::endl;
-         std::cout << ystart << std::endl;
+        if(xend!=xstart){
         float y = ystart;
         coord.xcoord = xstart;
         coord.ycoord = y;
@@ -44,79 +58,56 @@ if (std::fabs(g) <= 1.0) {
             y = y - g;
             coord.xcoord = x;
             coord.ycoord = std::round(y);
-            coords.push_back(coord);
-           
-        
-    }
-    }
+            coords.push_back(coord); 
+         }
+      }
+   }
 }
-   /* else{
+//negative diagonal trajectory
+else if(g<0){
+   if(xend!=xstart){
+   if(xend<xstart){
         float y = ystart;
-        std::cout << "hi2" << std::endl;
         coord.xcoord = xstart;
         coord.ycoord = y;
-        for (int x = xstart; x >= xend; --x) {
-            y = y + g;
+        for (int x = xstart; x > xend; --x) {
+            y = y - g;
             coord.xcoord = x;
             coord.ycoord = std::round(y);
-    }
-    }
-}
-/*else{
-   std::cout << "hi" << std::endl;
-   if (xend < xstart) {
-      std::cout << "xe<xs" << std::endl;
+            std::cout << coord.ycoord << std::endl;
+            coords.push_back(coord); 
+         }
+   }
+   else{
       float y = ystart;
       coord.xcoord = xstart;
       coord.ycoord = y;
-      for (int x = xstart; x <= xend; --x) {
-            y = y - g;
-            coord.xcoord = x;
-            coord.ycoord = std::round(y);
-            coords.push_back(coord);
-        }
-   }
-   else{
-         std::cout << "xe>xs" << std::endl;
-        float y = ystart;
-        coord.xcoord = xstart;
-        coord.ycoord = y;
-        for (int x = xstart; x >= xend; --x) {
-         y = y - g;
-         coord.xcoord = x;
-         coord.ycoord = std::round(y);
-         coords.push_back(coord);
-        }
-   }
-}
-else{
-   if (xend < xstart) {
-      std::cout << "xe<xs" << std::endl;
-        float y = ystart;
-        coord.xcoord = xstart;
-        coord.ycoord = y;
-        for (int x = xstart; x <= xend; --x) {
-            y = y - g;
-            coord.xcoord = x;
-            coord.ycoord = std::round(y);
-            coords.push_back(coord);
-        }
-    }
-
-    else{
-         float y = ystart;
-        coord.xcoord = xstart;
-        coord.ycoord = y;
-        for (int x = xstart; x >= xend; --x) {
+      for (int x = xstart; x < xend; ++x) {
             y = y + g;
             coord.xcoord = x;
             coord.ycoord = std::round(y);
-            coords.push_back(coord);
-    }
-
+            coords.push_back(coord); 
+         }
+   }
+   }
 }
+else{
+   //horizontal line
+      if(xstart<xend){
+       for (int i = xstart;i<xend;i++){
+         coord.ycoord = 0;
+         coord.xcoord = std::round(i);
+         coords.push_back(coord);
+         }
+      }
+      else{
+        for (int i = xstart;i>xend;i--){
+         coord.ycoord = 0;
+         coord.xcoord = std::round(i);
+         coords.push_back(coord);
+         } 
+      }
 }
-}*/
 //opening file
 std::ifstream infile(filename, std::ios::binary);
 if (!infile) {
@@ -146,6 +137,8 @@ for (int j = 0; j < height; j++) {
 infile.close();
 
 std::cout << coords.size() << std::endl;
+
+//creating frames using co-ordinates
 
 for (int i = 0; i < coords.size(); i++) {
     int y = coords[i].ycoord;
