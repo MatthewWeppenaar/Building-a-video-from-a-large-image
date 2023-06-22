@@ -10,11 +10,6 @@ unsigned char** WPPMAT001::FrameSequence::getFrame(int frame){return imageSequen
 std::vector<unsigned char **> WPPMAT001::FrameSequence::getSequence(){return imageSequence;}
 void WPPMAT001::FrameSequence::read(std::string filename){
   std::cout << "read" << std::endl;
-
-
-
-//trajectory calculation
-
 //opening file
 std::ifstream infile(filename, std::ios::binary);
 if (!infile) {
