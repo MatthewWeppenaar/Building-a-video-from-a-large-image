@@ -13,7 +13,7 @@ namespace WPPMAT001{
       //local variables
       std::vector<unsigned char **> imageSequence;
       int imageHeight;
-      int imageWidth;
+      int imageWidth; 
       
       
       public:
