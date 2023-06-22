@@ -42,3 +42,6 @@ run9: #horizontal trajectory reverse direction
 
 run10: #positive trajectory
 	./extractor.exe examples/sloan_image.pgm  -t 0 0 10000 10000 -s 640 480 -w none sequence2 -w reverse sequence_rev 
+
+generate_video:
+	python3 video_conversion.py
