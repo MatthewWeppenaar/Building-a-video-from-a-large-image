@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cmath>
 #include <sstream>
-
+#include <filesystem>
 void WPPMAT001::FrameSequence::add(unsigned char ** test){imageSequence.push_back(test);}
 int WPPMAT001::FrameSequence:: size(){return imageSequence.size();}
 unsigned char** WPPMAT001::FrameSequence::getFrame(int frame){return imageSequence[frame];}
@@ -151,6 +151,8 @@ else{
 return coords;
 }
 
+
+
 void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, std::vector<origion_coords> coords){
    for (int i = 0; i < coords.size(); i++) {
     int y = coords[i].ycoord;
@@ -168,8 +170,28 @@ void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, st
 
     imageSequence.push_back(frame);
 }
+
+   create_output_file();   
+
 //deallocating memory from big image
  deleteImage();
+}
+
+void WPPMAT001::FrameSequence::create_output_file(){
+   namespace fs = std::filesystem;
+   std::string folderPath = "out";
+
+    // Check if the directory exists
+    if (!fs::exists(folderPath)) {
+        // Create the directory if it doesn't exist
+        if (fs::create_directory(folderPath)) {
+            std::cout << "Directory created: " << folderPath << std::endl;
+        } else {
+            std::cout << "Failed to create directory: " << folderPath << std::endl;
+        }
+    } else {
+        std::cout << "Directory already exists: " << folderPath << std::endl;
+    }
 }
 
 void WPPMAT001::FrameSequence::write(int height, int width, std::string fileName)
