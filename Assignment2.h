@@ -12,6 +12,8 @@ namespace WPPMAT001{
    class FrameSequence{
       //local variables
       std::vector<unsigned char **> imageSequence;
+      int imageHeight;
+      int imageWidth;
       
       
       public:
