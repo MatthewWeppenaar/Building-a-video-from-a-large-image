@@ -15,7 +15,7 @@ def convert_pgm_to_video(image_folder, output_file):
 
     # Create the video writer
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video_writer = cv2.VideoWriter(output_file, fourcc, 30.0, (width, height))
+    video_writer = cv2.VideoWriter(output_file, fourcc, 60.0, (width, height))
 
     # Iterate over the image files and write frames to the video
     for file_name in file_list:
