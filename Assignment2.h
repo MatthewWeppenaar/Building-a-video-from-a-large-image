@@ -24,6 +24,7 @@ namespace WPPMAT001{
          std::vector<unsigned char **> getSequence();
          std::vector<WPPMAT001::origion_coords> generate_trajectory(int xorigion, int yorigion, int xend, int yend);//generate a trajectory
          void generate_frame_sequence(int height, int width,std::vector<origion_coords> coords);//generate a frame sequence
+         void create_output_file();//creates a folder for output images
          void read(std::string filename);//reading pgm into a data structure
          void deleteImage();//deleting space allocated for big image
          void write(int height, int width,std::string fileName);
