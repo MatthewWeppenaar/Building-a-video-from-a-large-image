@@ -34,6 +34,7 @@ def convert_pgm_to_video(image_folder, output_file):
     print("Video conversion complete!")
 
 # Usage example
+
 image_folder = 'out'
 output_file = 'output_video.mp4'
 convert_pgm_to_video(image_folder, output_file)
