@@ -19,6 +19,8 @@ if (!infile) {
 std::string magic;
 int width, height, maxval;
 infile >> magic >> width >> height >> maxval;
+imageHeight = height;
+imageWidth = width;
 
 if (magic != "P5" || maxval > 255) {
     std::cerr << "Invalid pgm format" << std::endl;
@@ -40,11 +42,8 @@ infile.close();
 
 void WPPMAT001::FrameSequence::deleteImage(){
    //deleating space allocated for large image
-   int image_height = 0;
-   while (image[image_height] != nullptr) {
-      image_height++;
-   }
-   for (int i = 0; i < image_height; ++i) { 
+   
+   for (int i = 0; i < imageHeight; ++i) { 
       delete[] image[i];
    }
    delete[] image;
@@ -154,22 +153,31 @@ return coords;
 
 
 void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, std::vector<origion_coords> coords){
-   for (int i = 0; i < coords.size(); i++) {
-    int y = coords[i].ycoord;
-    unsigned char** frame = new unsigned char* [height]; 
 
-    for (int j = 0; j < height; j++) {
-        int x = coords[i].xcoord;
-        frame[j] = new unsigned char[width];
-        for (int k = 0; k < width; k++) {
-            frame[j][k] = image[y][x];
-            x++;
-        }
-        y++;
+  for (int i = 0; i < coords.size(); i++) {
+        int y = coords[i].ycoord;
+        if (y >= 0 && y + height <= imageHeight) {  // Check y-coordinate bounds
+            unsigned char** frame = new unsigned char*[height];
+
+            for (int j = 0; j < height; j++) {
+                int x = coords[i].xcoord;
+                if (x >= 0 && x + width <= imageWidth) {  // Check x-coordinate bounds
+                    frame[j] = new unsigned char[width];
+
+                    for (int k = 0; k < width; k++) {
+                        frame[j][k] = image[y][x];
+                        x++;
+                    }
+                    y++;
+                }
+            }
+
+            imageSequence.push_back(frame);
+        } 
     }
 
-    imageSequence.push_back(frame);
-}
+   // imageSequence.push_back(frame);
+
 
    create_output_file();   
 
