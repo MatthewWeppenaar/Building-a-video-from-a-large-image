@@ -26,6 +26,14 @@ if (magic != "P5" || maxval > 255) {
     std::cerr << "Invalid pgm format" << std::endl;
 }
 
+std::string line;
+    // Skip comment lines at the beginning of the file
+    while (std::getline(infile, line)) {
+        if (!line.empty() && line[0] != '#') {
+            break; // Exit loop when a non-comment line is encountered
+        }
+    }
+
 infile.ignore(1, '\n');
 //unsigned char** two_pointer;
 //Allocating space for input image- height, then width
