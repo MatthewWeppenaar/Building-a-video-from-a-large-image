@@ -153,11 +153,11 @@ return coords;
 void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, std::vector<origion_coords> coords){
   for (int i = 0; i < coords.size(); i++) {
         int y = coords[i].ycoord;
-        if (y >= 0 && y + height <= imageHeight) {  // Check y-coordinate bounds
+        if (y >= 0 && y + height <= imageHeight) {  // Check y-coordinate bounds, ignore if out of bounds
             unsigned char** frame = new unsigned char*[height];
             for (int j = 0; j < height; j++) {
                 int x = coords[i].xcoord;
-                if (x >= 0 && x + width <= imageWidth) {  // Check x-coordinate bounds
+                if (x >= 0 && x + width <= imageWidth) {  // Check x-coordinate bounds,ignore if out of bounds
                     frame[j] = new unsigned char[width];
                     for (int k = 0; k < width; k++) {
                         frame[j][k] = image[y][x];
