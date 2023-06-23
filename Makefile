@@ -43,9 +43,10 @@ run9: #horizontal trajectory reverse direction
 run10: #positive trajectory
 	./extractor.exe examples/sloan_image.pgm  -t 0 0 10000 10000 -s 640 480 -w none sequence2 -w reverse sequence_rev
 
-run11: #multi-point trajectory
-	./extractor.exe examples/sloan_image.pgm  -p 3 0 0 200 200 200 400 -s 640 480 -w none sequence2
-run12: #multi-point trajectory
-	./extractor.exe examples/sloan_image.pgm  -p 5 0 0 10 10 20 20 30 30 40 40 -s 640 480 -w none seq5
+run11: #multi-point trajectory - 3 points 
+	./extractor.exe examples/sloan_image.pgm  -p 3 0 0 1000 1000 1200 0 -s 640 480 -w none sequence2
+
 generate_video:
 	python3 video_conversion.py
+remove_images:
+	rm out/*.pgm
