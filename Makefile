@@ -11,7 +11,7 @@ clean:
 	rm *.o extractor.exe out/*.pgm *.mp4
 
 run: #positive trajectory
-	./extractor.exe examples/sloan_image.pgm  -t 0 0 500 500 -s 640 480 -w none sequence2 -w reverse sequence_rev 
+	./extractor.exe examples/sloan_image.pgm  -t 0 0 500 500 -s 720 1080 -w none sequence2 -w reverse sequence_rev 
 
 run1: #positive trajectory with a few operations
 	./extractor.exe examples/larger_image.pgm  -t 0 1 500 500 -s 640 480 -w invert invseq -w none sequence2 -w reverse sequence3 
