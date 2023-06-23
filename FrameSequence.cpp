@@ -150,20 +150,15 @@ else{
 return coords;
 }
 
-
-
 void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, std::vector<origion_coords> coords){
-
   for (int i = 0; i < coords.size(); i++) {
         int y = coords[i].ycoord;
         if (y >= 0 && y + height <= imageHeight) {  // Check y-coordinate bounds
             unsigned char** frame = new unsigned char*[height];
-
             for (int j = 0; j < height; j++) {
                 int x = coords[i].xcoord;
                 if (x >= 0 && x + width <= imageWidth) {  // Check x-coordinate bounds
                     frame[j] = new unsigned char[width];
-
                     for (int k = 0; k < width; k++) {
                         frame[j][k] = image[y][x];
                         x++;
@@ -171,18 +166,12 @@ void WPPMAT001::FrameSequence::generate_frame_sequence(int height, int width, st
                     y++;
                 }
             }
-
             imageSequence.push_back(frame);
         } 
     }
-
-   // imageSequence.push_back(frame);
-
-
-   create_output_file();   
-
-//deallocating memory from big image
- deleteImage();
+    create_output_file();   
+    //deallocating memory from big image
+    deleteImage();
 }
 
 void WPPMAT001::FrameSequence::create_output_file(){
