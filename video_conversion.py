@@ -1,5 +1,6 @@
 import cv2
 import os
+#partially created using chatGPT
 
 def convert_pgm_to_video(image_folder, output_file):
     # Get the list of PGM files in the image folder
